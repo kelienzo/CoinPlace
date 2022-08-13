@@ -1,5 +1,6 @@
 package com.kelly.coinplace.domain.usecases
 
+import com.google.gson.Gson
 import com.kelly.coinplace.common.Constants
 import com.kelly.coinplace.common.ResultHandler
 import com.kelly.coinplace.data.remote.dto.toCoins
@@ -22,6 +23,8 @@ class GetAllCoinsUseCase @Inject constructor(
             if (response.isSuccessful && result != null) {
                 emit(ResultHandler.Success(data = result))
             } else {
+                Constants.ERROR_MESSAGE =
+                    Gson().fromJson(response.errorBody()?.charStream(), Coins::class.java).error
                 emit(ResultHandler.Error(errorData = result))
             }
         } catch (t: Throwable) {

@@ -7,10 +7,14 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
 object Constants {
     const val BASE_URL = "https://api.coinpaprika.com/v1/"
+
+    var ERROR_MESSAGE = ""
 
     fun <T> deserializeError(value: String, errorClass: Class<T>): Class<T> {
         return Gson().fromJson(value, errorClass::class.java)

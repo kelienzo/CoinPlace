@@ -9,5 +9,5 @@ data class Coins(
     val price: Double,
     val rank: Int,
     val symbol: String,
-    val totalSupply: Int
+    val totalSupply: Long
 )

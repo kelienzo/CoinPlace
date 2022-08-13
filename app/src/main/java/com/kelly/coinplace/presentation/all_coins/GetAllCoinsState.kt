@@ -1,4 +1,4 @@
-package com.kelly.coinplace.presentation.viewmodel
+package com.kelly.coinplace.presentation.all_coins
 
 import com.kelly.coinplace.domain.model.Coins
 

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.kelly.coinplace">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".di.CoinPlaceApp"
         android:allowBackup="true"
