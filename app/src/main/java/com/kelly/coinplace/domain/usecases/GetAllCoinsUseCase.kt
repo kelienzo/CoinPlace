@@ -24,7 +24,7 @@ class GetAllCoinsUseCase @Inject constructor(
                 emit(ResultHandler.Success(data = result))
             } else {
                 Constants.ERROR_MESSAGE =
-                    Gson().fromJson(response.errorBody()?.charStream(), Coins::class.java).error
+                    Gson().fromJson(response.errorBody()?.charStream(), Coins::class.java).error ?: ""
                 emit(ResultHandler.Error(errorData = result))
             }
         } catch (t: Throwable) {

@@ -6,6 +6,7 @@ import com.kelly.coinplace.data.repository.CoinPlaceRepositoryImpl
 import com.kelly.coinplace.domain.repository.CoinPlaceRepository
 import com.kelly.coinplace.domain.usecases.CoinPlaceUseCases
 import com.kelly.coinplace.domain.usecases.GetAllCoinsUseCase
+import com.kelly.coinplace.domain.usecases.GetSingleCoinByIdUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +39,9 @@ object CoinPlaceAppModule {
     @Provides
     @Singleton
     fun provideCoinPlaceUseCases(coinPlaceRepository: CoinPlaceRepository): CoinPlaceUseCases {
-        return CoinPlaceUseCases(GetAllCoinsUseCase(coinPlaceRepository))
+        return CoinPlaceUseCases(
+            GetAllCoinsUseCase(coinPlaceRepository = coinPlaceRepository),
+            GetSingleCoinByIdUseCase(coinPlaceRepository = coinPlaceRepository)
+        )
     }
 }

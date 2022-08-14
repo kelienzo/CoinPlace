@@ -16,8 +16,8 @@ object Constants {
 
     var ERROR_MESSAGE = ""
 
-    fun <T> deserializeError(value: String, errorClass: Class<T>): Class<T> {
-        return Gson().fromJson(value, errorClass::class.java)
+    fun <T> deserializeError(value: String, errorClass: T): T {
+        return Gson().fromJson(value, errorClass!!::class.java)
     }
 
     fun getOkhttpClient(): OkHttpClient {
