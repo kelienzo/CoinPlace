@@ -32,6 +32,7 @@ fun AllCoinsItem(coins: Coins, modifier: Modifier = Modifier) {
         modifier = modifier,
         shape = MaterialTheme.shapes.small.copy(
             bottomStart = CornerSize(20.dp),
+            bottomEnd = CornerSize(10.dp),
             topEnd = CornerSize(20.dp)
         ),
         elevation = 5.dp,
@@ -46,7 +47,7 @@ fun AllCoinsItem(coins: Coins, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .border(
                         BorderStroke(
-                            width = 1.5.dp,
+                            width = 1.dp,
                             color = MaterialTheme.colors.primary
                         ),
                         shape = RoundedCornerShape(20.dp)
@@ -68,7 +69,7 @@ fun AllCoinsItem(coins: Coins, modifier: Modifier = Modifier) {
                 coins = coins,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
+                    .padding(horizontal = 5.dp)
             )
         }
     }
@@ -89,13 +90,15 @@ fun CoinDetailsSection(coins: Coins, modifier: Modifier = Modifier) {
         CoinsDetails(
             firstText = coins.name,
             secondText = "${coins.rank}",
-            thirdText = "Last Updated:\n ${coins.lastUpdated.parseStringToDateAndFormatToString("dd-MM-yyyy hh:mm:ss a")}",
+            addSecondText = true,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
         )
         CoinsDetails(
             firstText = "\$$formattedAmount",
-            secondText = "Total Supply:\n ${coins.totalSupply}",
-            thirdText = "Market Cap:\n ${coins.marketCap}",
+            secondText = "Market Cap: ${coins.marketCap}",
+            addSecondText = true,
+            verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.End
         )
     }
@@ -103,15 +106,16 @@ fun CoinDetailsSection(coins: Coins, modifier: Modifier = Modifier) {
 
 @Composable
 fun CoinsDetails(
-    firstText: String,
-    secondText: String,
-    thirdText: String,
-    horizontalAlignment: Alignment.Horizontal,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    firstText: String = "",
+    secondText: String = "",
+    addSecondText: Boolean = false,
+    verticalArrangement: Arrangement.Vertical,
+    horizontalAlignment: Alignment.Horizontal
 ) {
     Column(
         horizontalAlignment = horizontalAlignment,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = verticalArrangement,
         modifier = modifier
     ) {
         Text(
@@ -122,12 +126,10 @@ fun CoinsDetails(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = secondText
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = thirdText
-        )
+        if (addSecondText) {
+            Text(
+                text = secondText
+            )
+        }
     }
 }

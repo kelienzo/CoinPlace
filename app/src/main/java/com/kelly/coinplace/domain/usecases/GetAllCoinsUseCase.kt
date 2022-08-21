@@ -7,6 +7,7 @@ import com.kelly.coinplace.data.remote.dto.toCoins
 import com.kelly.coinplace.domain.model.Coins
 import com.kelly.coinplace.domain.repository.CoinPlaceRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -23,8 +24,10 @@ class GetAllCoinsUseCase @Inject constructor(
             if (response.isSuccessful && result != null) {
                 emit(ResultHandler.Success(data = result))
             } else {
-                Constants.ERROR_MESSAGE =
-                    Gson().fromJson(response.errorBody()?.charStream(), Coins::class.java).error ?: ""
+                Constants.ERROR_MESSAGE = Gson().fromJson(
+                    response.errorBody()?.charStream(),
+                    Coins::class.java
+                ).error ?: ""
                 emit(ResultHandler.Error(errorData = result))
             }
         } catch (t: Throwable) {

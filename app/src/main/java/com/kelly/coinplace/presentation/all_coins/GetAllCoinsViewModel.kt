@@ -54,8 +54,9 @@ class GetAllCoinsViewModel @Inject constructor(
             coinPlaceUseCases.getAllCoinsUseCase.getAllCoins().collect { result ->
                 when (result) {
                     is ResultHandler.Error -> {
-                        _getAllCoinsState.value =
-                            GetAllCoinsState(error = Throwable(getErrorMessage()))
+                        _getAllCoinsState.value = GetAllCoinsState(
+                            error = Throwable(getErrorMessage())
+                        )
                     }
                     is ResultHandler.Exception -> {
                         _getAllCoinsState.value = GetAllCoinsState(error = result.throwable)
@@ -64,8 +65,9 @@ class GetAllCoinsViewModel @Inject constructor(
                         _getAllCoinsState.value = GetAllCoinsState(isLoading = true)
                     }
                     is ResultHandler.Success -> {
-                        _getAllCoinsState.value =
-                            GetAllCoinsState(data = result.data ?: emptyList())
+                        _getAllCoinsState.value = GetAllCoinsState(
+                            data = result.data ?: emptyList()
+                        )
                     }
                 }
             }

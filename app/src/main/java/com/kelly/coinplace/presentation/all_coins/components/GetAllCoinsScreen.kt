@@ -36,7 +36,7 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val showButton by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemIndex > 2
+            lazyListState.firstVisibleItemIndex > 1
         }
     }
     val value by animateDpAsState(
@@ -47,6 +47,16 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
     )
 
     val infiniteTransition = rememberInfiniteTransition()
+    val size by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2000,
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
     val color by infiniteTransition.animateColor(
         initialValue = Color.Green,
         targetValue = Color.Red,
@@ -60,7 +70,7 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            contentPadding = PaddingValues(horizontal = 2.dp)
+            contentPadding = PaddingValues(horizontal = 3.dp)
         ) {
             items(getAllCoinsState.data) { coins ->
                 AllCoinsItem(
@@ -85,7 +95,7 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
         AnimatedVisibility(
             visible = showButton,
             enter = slideInHorizontally() + fadeIn(),
-            exit =  slideOutHorizontally() + fadeOut(),
+            exit = slideOutHorizontally() + fadeOut(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 25.dp, end = 15.dp)

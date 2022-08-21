@@ -11,6 +11,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -38,10 +40,22 @@ object CoinPlaceAppModule {
 
     @Provides
     @Singleton
-    fun provideCoinPlaceUseCases(coinPlaceRepository: CoinPlaceRepository): CoinPlaceUseCases {
+    fun provideCoroutineDispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoinPlaceUseCases(
+        coinPlaceRepository: CoinPlaceRepository,
+        coroutineDispatcher: CoroutineDispatcher
+    ): CoinPlaceUseCases {
         return CoinPlaceUseCases(
             GetAllCoinsUseCase(coinPlaceRepository = coinPlaceRepository),
-            GetSingleCoinByIdUseCase(coinPlaceRepository = coinPlaceRepository)
+            GetSingleCoinByIdUseCase(
+                coinPlaceRepository = coinPlaceRepository,
+                coroutineDispatcher = coroutineDispatcher
+            )
         )
     }
 }

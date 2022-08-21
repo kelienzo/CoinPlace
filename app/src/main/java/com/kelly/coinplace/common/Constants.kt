@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
+import java.io.Reader
+import java.lang.reflect.Type
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -16,9 +18,10 @@ object Constants {
 
     var ERROR_MESSAGE = ""
 
-    fun <T> deserializeError(value: String, errorClass: T): T {
-        return Gson().fromJson(value, errorClass!!::class.java)
-    }
+//    inline fun <reified T> deserializeError(value: Reader?, errorClass: T): T {
+//        val result = Gson().fromJson(value, Type::class.java)
+//        return result
+//    }
 
     fun getOkhttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor().apply {
@@ -44,6 +47,9 @@ object Constants {
             }
             is IOException -> {
                 Throwable("Couldn't reach server, please check your internet connection")
+            }
+            is UnsupportedOperationException -> {
+                Throwable("Operation is not supported")
             }
             else -> {
                 Throwable("An unknown error occurred")

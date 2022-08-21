@@ -45,12 +45,10 @@ fun CoinsDto.toCoins(): Coins {
     return Coins(
         id = id,
         error = error,
-        lastUpdated = last_updated,
         marketCap = quotes.USD.market_cap,
         name = name,
         price = quotes.USD.price,
         rank = rank,
         symbol = symbol,
-        totalSupply = total_supply
     )
 }

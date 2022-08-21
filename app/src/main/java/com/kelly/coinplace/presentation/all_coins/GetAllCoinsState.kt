@@ -5,6 +5,5 @@ import com.kelly.coinplace.domain.model.Coins
 data class GetAllCoinsState(
     val isLoading: Boolean = false,
     val data: List<Coins> = emptyList(),
-    val error: Throwable = Throwable("")
-) {
-}
+    val error: Throwable = Throwable()
+)
