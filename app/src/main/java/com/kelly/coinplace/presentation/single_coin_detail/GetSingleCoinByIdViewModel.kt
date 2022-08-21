@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kelly.coinplace.common.Constants
 import com.kelly.coinplace.common.ResultHandler
 import com.kelly.coinplace.domain.usecases.CoinPlaceUseCases
+import com.kelly.coinplace.presentation.single_coin_detail.components.GetCoinFromBothState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,34 +27,27 @@ class GetSingleCoinByIdViewModel @Inject constructor(
     private val getSingleCoinDescByIdState: StateFlow<GetSingleCoinDescByIdState>
         get() = _getSingleCoinDescByIdState
 
-    private val _getSingleCoinFromBothState =
-        mutableStateOf<GetSingleCoinFromBothState>(GetSingleCoinFromBothState.EmptyState)
-    val getSingleCoinFromBothState: State<GetSingleCoinFromBothState>
-        get() = _getSingleCoinFromBothState
+    private val _getSingleCoinFromBothState = mutableStateOf(GetCoinFromBothState())
+    val getSingleCoinFromBothState: State<GetCoinFromBothState> = _getSingleCoinFromBothState
 
     init {
-        savedStateHandle.get<String>("coinId")?.let {
+        savedStateHandle.get<String>(Constants.coinId)?.let {
             getSingleCoinById(coinId = it)
-            getSingleCoinDescById(coinId = it)
+//            getSingleCoinDescById(coinId = it)
         }
 
         getSingleCoinFromBothState()
     }
 
     private fun getSingleCoinFromBothState() {
-        getSingleCoinByIdState.zip(getSingleCoinDescByIdState) { stateOne, stateTwo ->
-            if (stateOne.isLoading && stateTwo.isLoading) {
-                _getSingleCoinFromBothState.value = GetSingleCoinFromBothState.Loading
-            } else if (stateOne.error.localizedMessage?.isNotEmpty() == true && stateTwo.error.localizedMessage?.isNotEmpty() == true) {
-                _getSingleCoinFromBothState.value = GetSingleCoinFromBothState.Error(
-                    error = stateOne.error
-                )
+        getSingleCoinByIdState.combine(getSingleCoinDescByIdState) { stateOne, stateTwo ->
+            if (stateOne.isLoading || stateTwo.isLoading) {
+                _getSingleCoinFromBothState.value = GetCoinFromBothState(isLoading = true)
+            } else if (stateOne.error.localizedMessage?.isNotEmpty() == true || stateTwo.error.localizedMessage?.isNotEmpty() == true) {
+                _getSingleCoinFromBothState.value = GetCoinFromBothState(error = stateOne.error)
             } else {
-                _getSingleCoinFromBothState.value = GetSingleCoinFromBothState.DataGotten(
-                    data = Pair(
-                        first = stateOne.data,
-                        second = stateTwo.data
-                    )
+                _getSingleCoinFromBothState.value = GetCoinFromBothState(
+                    data = Pair(first = stateOne.data, second = stateTwo.data)
                 )
             }
         }
@@ -61,57 +56,57 @@ class GetSingleCoinByIdViewModel @Inject constructor(
 
     private fun getSingleCoinById(coinId: String) {
         viewModelScope.launch {
-            coinPlaceUseCases.getSingleCoinByIdUseCase.getSingleCoinById(coinId = coinId)
-                .collect { result ->
-                    when (result) {
-                        is ResultHandler.Error -> {
-                            _getSingleCoinByIdState.value =
-                                GetSingleCoinByIdState(error = Throwable(result.errorData.error))
-                        }
-                        is ResultHandler.Exception -> {
-                            _getSingleCoinByIdState.value = GetSingleCoinByIdState(
-                                error = result.throwable
-                            )
-                        }
-                        ResultHandler.Loading -> {
-                            _getSingleCoinByIdState.value = GetSingleCoinByIdState(isLoading = true)
-                        }
-                        is ResultHandler.Success -> {
-                            _getSingleCoinByIdState.value = GetSingleCoinByIdState(
-                                data = result.data
-                            )
-                        }
-                    }
+            val result = coinPlaceUseCases.getSingleCoinByIdUseCase.getSingleCoinById(
+                coinId = coinId
+            )
+            when (result) {
+                is ResultHandler.Error -> {
+                    _getSingleCoinByIdState.value =
+                        GetSingleCoinByIdState(error = Throwable(result.errorData.error))
                 }
+                is ResultHandler.Exception -> {
+                    _getSingleCoinByIdState.value = GetSingleCoinByIdState(
+                        error = result.throwable
+                    )
+                }
+                ResultHandler.Loading -> {
+                    _getSingleCoinByIdState.value = GetSingleCoinByIdState(isLoading = true)
+                }
+                is ResultHandler.Success -> {
+                    _getSingleCoinByIdState.value = GetSingleCoinByIdState(
+                        data = result.data
+                    )
+                }
+            }
         }
     }
 
     private fun getSingleCoinDescById(coinId: String) {
         viewModelScope.launch {
-            coinPlaceUseCases.getSingleCoinByIdUseCase.getSingleCoinDescById(coinId = coinId)
-                .collect { result ->
-                    when (result) {
-                        is ResultHandler.Error -> {
-                            _getSingleCoinDescByIdState.value =
-                                GetSingleCoinDescByIdState(error = Throwable(result.errorData.error))
-                        }
-                        is ResultHandler.Exception -> {
-                            _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
-                                error = result.throwable
-                            )
-                        }
-                        ResultHandler.Loading -> {
-                            _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
-                                isLoading = true
-                            )
-                        }
-                        is ResultHandler.Success -> {
-                            _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
-                                data = result.data
-                            )
-                        }
-                    }
+            val result = coinPlaceUseCases.getSingleCoinByIdUseCase.getSingleCoinDescById(
+                coinId = coinId
+            )
+            when (result) {
+                is ResultHandler.Error -> {
+                    _getSingleCoinDescByIdState.value =
+                        GetSingleCoinDescByIdState(error = Throwable(result.errorData.error))
                 }
+                is ResultHandler.Exception -> {
+                    _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
+                        error = result.throwable
+                    )
+                }
+                ResultHandler.Loading -> {
+                    _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
+                        isLoading = true
+                    )
+                }
+                is ResultHandler.Success -> {
+                    _getSingleCoinDescByIdState.value = GetSingleCoinDescByIdState(
+                        data = result.data
+                    )
+                }
+            }
         }
     }
 }

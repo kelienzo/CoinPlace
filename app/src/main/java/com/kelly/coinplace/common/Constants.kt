@@ -18,6 +18,8 @@ object Constants {
 
     var ERROR_MESSAGE = ""
 
+    const val coinId = "coinId"
+
 //    inline fun <reified T> deserializeError(value: Reader?, errorClass: T): T {
 //        val result = Gson().fromJson(value, Type::class.java)
 //        return result

@@ -22,45 +22,43 @@ class GetSingleCoinByIdUseCase @Inject constructor(
     private val coroutineDispatcher: CoroutineDispatcher
 ) {
 
-    fun getSingleCoinById(coinId: String): Flow<ResultHandler<CoinSingle>> = flow {
+    suspend fun getSingleCoinById(coinId: String): ResultHandler<CoinSingle> =
         withContext(coroutineDispatcher) {
             try {
-                emit(ResultHandler.Loading)
+                ResultHandler.Loading
 
                 val response = coinPlaceRepository.getSingleCoinById(coinId = coinId)
                 val result = response.body()?.toCoinSingle()
                 if (response.isSuccessful && result != null) {
-                    emit(ResultHandler.Success(data = result))
+                    ResultHandler.Success(data = result)
                 } else {
                     val error =
                         Gson().fromJson(response.errorBody()?.charStream(), CoinSingle::class.java)
-                    emit(ResultHandler.Error(errorData = error))
+                    ResultHandler.Error(errorData = error)
                 }
             } catch (t: Throwable) {
-                emit(ResultHandler.Exception(throwable = Constants.errorHandler(throwable = t)))
+                ResultHandler.Exception(throwable = Constants.errorHandler(throwable = t))
             }
         }
-    }
 
-    fun getSingleCoinDescById(coinId: String): Flow<ResultHandler<CoinSingleDesc>> = flow {
+    suspend fun getSingleCoinDescById(coinId: String): ResultHandler<CoinSingleDesc> =
         withContext(coroutineDispatcher) {
             try {
-                emit(ResultHandler.Loading)
+                ResultHandler.Loading
 
                 val response = coinPlaceRepository.getSingleCoinDescById(coinId = coinId)
                 val result = response.body()?.toCoinSingleDesc()
                 if (response.isSuccessful && result != null) {
-                    emit(ResultHandler.Success(data = result))
+                    ResultHandler.Success(data = result)
                 } else {
                     val error = Gson().fromJson(
                         response.errorBody()?.charStream(),
                         CoinSingleDesc::class.java
                     )
-                    emit(ResultHandler.Error(errorData = error))
+                    ResultHandler.Error(errorData = error)
                 }
             } catch (t: Throwable) {
-                emit(ResultHandler.Exception(throwable = Constants.errorHandler(throwable = t)))
+                ResultHandler.Exception(throwable = Constants.errorHandler(throwable = t))
             }
         }
-    }
 }

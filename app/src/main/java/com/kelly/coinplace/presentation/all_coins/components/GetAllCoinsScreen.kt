@@ -1,5 +1,7 @@
 package com.kelly.coinplace.presentation.all_coins.components
 
+import android.app.Application
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -24,13 +26,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.kelly.coinplace.presentation.all_coins.GetAllCoinsViewModel
+import com.kelly.coinplace.presentation.screens.CoinPlaceScreens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
+fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = hiltViewModel()) {
     val getAllCoinsState = viewModel.getAllCoinsState.value
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -78,6 +82,7 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
                     modifier = Modifier
                         .clickable {
                             //TODO
+//                            navController.navigate(CoinPlaceScreens.SingleCoinDetailScreen.route + "/${coins.id}")
                         }
                         .border(
                             BorderStroke(
@@ -115,7 +120,7 @@ fun GetAllCoins(viewModel: GetAllCoinsViewModel = hiltViewModel()) {
                     text = getAllCoinsState.error.localizedMessage ?: "An Error Occurred",
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.error,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(10.dp)
@@ -143,7 +148,7 @@ fun FloatingActionButton(
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
-            contentDescription = "Up Arrow",
+            contentDescription = "Move to the first item on the list",
         )
     }
 }

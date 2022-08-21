@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.kelly.coinplace.presentation.all_coins.components.GetAllCoins
+import com.kelly.coinplace.presentation.navigation.CoinPlaceNavigationScreen
 import com.kelly.coinplace.ui.theme.CoinPlaceTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CoinPlaceTheme {
-                GetAllCoins()
+                CoinPlaceNavigationScreen()
             }
         }
     }
