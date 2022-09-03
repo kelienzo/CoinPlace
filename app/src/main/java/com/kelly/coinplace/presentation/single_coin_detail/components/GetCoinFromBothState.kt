@@ -5,6 +5,7 @@ import com.kelly.coinplace.domain.model.CoinSingleDesc
 
 data class GetCoinFromBothState(
     val isLoading: Boolean = false,
-    val data: Pair<CoinSingle?, CoinSingleDesc?> = Pair(null, null),
+    val coinSingle: CoinSingle? = null,
+    val coinSingleDesc: CoinSingleDesc? = null,
     val error: Throwable = Throwable("")
 )

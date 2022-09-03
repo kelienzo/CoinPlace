@@ -81,8 +81,7 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
                     coins = coins,
                     modifier = Modifier
                         .clickable {
-                            //TODO
-//                            navController.navigate(CoinPlaceScreens.SingleCoinDetailScreen.route + "/${coins.id}")
+                            navController.navigate(CoinPlaceScreens.SingleCoinDetailScreen.route + "/${coins.id}")
                         }
                         .border(
                             BorderStroke(
