@@ -12,3 +12,4 @@ And also this app was built entirely with jetpack compose.
 - MVVM
 - Clean Architecture with Use cases
 - jetpack Compose
+- Kotlin coroutines (Stateflow, Flows etc)
