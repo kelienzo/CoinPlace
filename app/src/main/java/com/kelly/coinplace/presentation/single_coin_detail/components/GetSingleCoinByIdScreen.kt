@@ -119,7 +119,7 @@ fun GetSingleCoinByIdScreen(
                     }
                     Text(
                         text = "ATH Price\n" +
-                                formattedAthPrice,
+                                "\$$formattedAthPrice",
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
