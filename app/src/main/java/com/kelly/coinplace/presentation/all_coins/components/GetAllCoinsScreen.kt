@@ -1,11 +1,8 @@
 package com.kelly.coinplace.presentation.all_coins.components
 
-import android.app.Application
-import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,10 +18,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kelly.coinplace.presentation.all_coins.GetAllCoinsViewModel
@@ -38,6 +37,25 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
     val getAllCoinsState = viewModel.getAllCoinsState.value
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val iconAnimation = remember {
+        Animatable(initialValue = -1f)
+    }
+
+    LaunchedEffect(key1 = System.currentTimeMillis()) {
+        iconAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 1000
+                    0.0f at 250 with FastOutLinearInEasing
+                    1f at 500 with FastOutLinearInEasing
+                    0.0f at 750 with FastOutLinearInEasing
+                    -1f at 1000 with FastOutLinearInEasing
+                },
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+    }
     val showButton by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemIndex > 1
@@ -107,6 +125,7 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
             FloatingActionButton(
                 listState = lazyListState,
                 coroutineScope = coroutineScope,
+                directionValue = iconAnimation.value
             )
         }
 
@@ -134,8 +153,12 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
 fun FloatingActionButton(
     listState: LazyListState,
     coroutineScope: CoroutineScope,
+    directionValue: Float,
+    distance: Dp = 15.dp,
     modifier: Modifier = Modifier
 ) {
+    val travelDirection = with(LocalDensity.current) {distance.toPx()}
+
     FloatingActionButton(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.primary,
@@ -146,6 +169,11 @@ fun FloatingActionButton(
         }
     ) {
         Icon(
+            modifier = Modifier
+                .size(30.dp)
+                .graphicsLayer {
+              translationY =  directionValue * travelDirection
+            },
             imageVector = Icons.Default.KeyboardArrowUp,
             contentDescription = "Move to the first item on the list",
         )
