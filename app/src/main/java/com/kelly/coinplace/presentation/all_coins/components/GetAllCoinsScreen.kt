@@ -61,32 +61,26 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
             lazyListState.firstVisibleItemIndex > 1
         }
     }
-    val value by animateDpAsState(
-        targetValue = 50.dp, animationSpec = infiniteRepeatable(
-            animation = tween(2000),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
 
-    val infiniteTransition = rememberInfiniteTransition()
-    val size by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 10f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 2000,
-            ),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    val color by infiniteTransition.animateColor(
-        initialValue = Color.Green,
-        targetValue = Color.Red,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
+//    val infiniteTransition = rememberInfiniteTransition()
+//    val size by infiniteTransition.animateFloat(
+//        initialValue = 0f,
+//        targetValue = 10f,
+//        animationSpec = infiniteRepeatable(
+//            animation = tween(
+//                durationMillis = 2000,
+//            ),
+//            repeatMode = RepeatMode.Reverse
+//        )
+//    )
+//    val color by infiniteTransition.animateColor(
+//        initialValue = Color.Green,
+//        targetValue = Color.Red,
+//        animationSpec = infiniteRepeatable(
+//            animation = tween(1000, easing = LinearEasing),
+//            repeatMode = RepeatMode.Reverse
+//        )
+//    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
