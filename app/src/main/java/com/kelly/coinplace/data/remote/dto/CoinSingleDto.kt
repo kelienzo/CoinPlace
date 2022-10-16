@@ -22,8 +22,8 @@ data class QuotesSingle(
 )
 
 data class USDSingle(
-    val ath_date: String,
-    val ath_price: Double,
+    val ath_date: String? = "N/A",
+    val ath_price: Double? = 0.0,
     val market_cap: Long,
     val market_cap_change_24h: Double,
     val percent_change_12h: Double,
@@ -35,7 +35,7 @@ data class USDSingle(
     val percent_change_30m: Double,
     val percent_change_6h: Double,
     val percent_change_7d: Double,
-    val percent_from_price_ath: Double,
+    val percent_from_price_ath: Double? = 0.0,
     val price: Double,
     val volume_24h: Double,
     val volume_24h_change_24h: Double

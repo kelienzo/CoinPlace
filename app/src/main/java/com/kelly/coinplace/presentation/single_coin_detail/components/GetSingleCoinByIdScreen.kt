@@ -60,7 +60,7 @@ fun GetSingleCoinByIdScreen(
                         formattedAmount = DecimalFormat("#,###,###,###.###")
                             .format(singleCoin.price.toFloat())
                         formattedAthPrice = DecimalFormat("#,###,###,###.###")
-                            .format(singleCoin.athPrice.toFloat())
+                            .format(singleCoin.athPrice?.toFloat() ?: 0.0)
                     } catch (n: NumberFormatException) {
                         n.printStackTrace()
                     }

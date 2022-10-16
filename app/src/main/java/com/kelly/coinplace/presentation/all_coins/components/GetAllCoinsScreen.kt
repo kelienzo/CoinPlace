@@ -37,38 +37,48 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
     val getAllCoinsState = viewModel.getAllCoinsState.value
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val iconAnimation = remember {
-        Animatable(initialValue = -1f)
-    }
-
-    LaunchedEffect(key1 = System.currentTimeMillis()) {
-        iconAnimation.animateTo(
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(
-                animation = keyframes {
-                    durationMillis = 1000
-                    0.0f at 250 with FastOutLinearInEasing
-                    1f at 500 with FastOutLinearInEasing
-                    0.0f at 750 with FastOutLinearInEasing
-                    -1f at 1000 with FastOutLinearInEasing
-                },
-                repeatMode = RepeatMode.Reverse
-            )
-        )
-    }
+//    val iconAnimation = remember {
+//        Animatable(initialValue = -1f)
+//    }
+//
+//    LaunchedEffect(key1 = System.currentTimeMillis()) {
+//        iconAnimation.animateTo(
+//            targetValue = 1f,
+//            animationSpec = infiniteRepeatable(
+//                animation = keyframes {
+//                    durationMillis = 1000
+//                    0.0f at 250 with FastOutLinearInEasing
+//                    1f at 500 with FastOutLinearInEasing
+//                    0.0f at 750 with FastOutLinearInEasing
+//                    -1f at 1000 with FastOutLinearInEasing
+//                },
+//                repeatMode = RepeatMode.Reverse
+//            )
+//        )
+//    }
     val showButton by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemIndex > 1
         }
     }
 
-//    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition()
+    val directionAnimation by infiniteTransition.animateFloat(
+        initialValue = -1f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween (
+                durationMillis = 600
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 //    val size by infiniteTransition.animateFloat(
-//        initialValue = 0f,
-//        targetValue = 10f,
+//        initialValue = 30f,
+//        targetValue = 100f,
 //        animationSpec = infiniteRepeatable(
 //            animation = tween(
-//                durationMillis = 2000,
+//                durationMillis = 1000
 //            ),
 //            repeatMode = RepeatMode.Reverse
 //        )
@@ -119,7 +129,7 @@ fun GetAllCoins(navController: NavController, viewModel: GetAllCoinsViewModel = 
             FloatingActionButton(
                 listState = lazyListState,
                 coroutineScope = coroutineScope,
-                directionValue = iconAnimation.value
+                directionValue = directionAnimation
             )
         }
 
@@ -152,13 +162,14 @@ fun FloatingActionButton(
     modifier: Modifier = Modifier
 ) {
     val travelDirection = with(LocalDensity.current) {distance.toPx()}
+//    val size = with(LocalDensity.current) {directionValue.toDp()}
 
     FloatingActionButton(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.primary,
         onClick = {
             coroutineScope.launch {
-                listState.animateScrollToItem(0)
+                listState.animateScrollToItem(0, 10)
             }
         }
     ) {
